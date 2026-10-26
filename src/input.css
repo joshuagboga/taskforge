@@ -1,0 +1,169 @@
+/* =========================================================
+   TaskForge — Tailwind CSS v4 source
+   Build:  npm run build   (or `npm run dev` to watch)
+   Output: ../style.css
+   ========================================================= */
+
+/* Only scan the files that contain class names (not README, node_modules…) */
+@import "tailwindcss" source(none);
+@source "../index.html";
+@source "../app.js";
+
+/* Dark mode is controlled by JavaScript via <html data-theme="dark">, not the OS media query */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ---------- Design tokens → utilities such as bg-surface, text-muted, border-line, bg-brand/10 ---------- */
+@theme {
+  --color-canvas: #f4f5f9;
+  --color-surface: #ffffff;
+  --color-surface-2: #f1f3f8;
+  --color-surface-hover: #f7f8fc;
+  --color-line: #e2e5ee;
+  --color-line-strong: #cfd4e1;
+  --color-ink: #171b26;
+  --color-muted: #5d6578;
+  --color-faint: #8a91a3;
+
+  --color-brand: #4f46e5;
+  --color-brand-hover: #4338ca;
+  --color-on-brand: #ffffff;
+
+  --color-success: #15803d;
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-warning: #b45309;
+
+  --color-p-low: #0f766e;
+  --color-p-medium: #a16207;
+  --color-p-high: #c2410c;
+  --color-p-critical: #be123c;
+
+  --ease-snappy: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --animate-card-in: card-in 0.25s var(--ease-snappy);
+  --animate-fade-in: fade-in 0.15s ease-out;
+  --animate-pop-in: pop-in 0.2s var(--ease-snappy);
+  --animate-toast-in: toast-in 0.25s var(--ease-snappy);
+  --animate-toast-out: toast-out 0.2s ease-in forwards;
+  --animate-bump: bump 0.35s var(--ease-snappy);
+  --animate-highlight: highlight 1.6s var(--ease-snappy);
+  --animate-shake: shake 0.35s;
+
+  @keyframes card-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes pop-in {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes toast-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes toast-out {
+    to { opacity: 0; transform: translateX(24px); }
+  }
+  @keyframes bump {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.12); }
+    100% { transform: scale(1); }
+  }
+  @keyframes highlight {
+    0%, 30% {
+      background-color: color-mix(in srgb, var(--color-brand) 12%, transparent);
+      box-shadow: inset 0 0 0 2px var(--color-brand);
+    }
+    100% { box-shadow: inset 0 0 0 2px transparent; }
+  }
+  @keyframes shake {
+    20%, 60% { transform: translateX(-4px); }
+    40%, 80% { transform: translateX(4px); }
+  }
+}
+
+@layer base {
+  /* Dark theme: swap the token values, every utility that uses them follows automatically */
+  [data-theme="dark"] {
+    --color-canvas: #0e1016;
+    --color-surface: #161922;
+    --color-surface-2: #1d212c;
+    --color-surface-hover: #1b1f29;
+    --color-line: #282d3a;
+    --color-line-strong: #363c4c;
+    --color-ink: #e7e9f0;
+    --color-muted: #a0a7b8;
+    --color-faint: #6f778a;
+
+    --color-brand: #818cf8;
+    --color-brand-hover: #a5b4fc;
+    --color-on-brand: #11131c;
+
+    --color-success: #4ade80;
+    --color-danger: #f87171;
+    --color-danger-hover: #fca5a5;
+    --color-warning: #fbbf24;
+
+    --color-p-low: #5eead4;
+    --color-p-medium: #fcd34d;
+    --color-p-high: #fdba74;
+    --color-p-critical: #fda4af;
+  }
+
+  /* Tailwind v4 resets buttons to cursor: default — restore the pointer */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand;
+  }
+
+  kbd {
+    @apply inline-block min-w-[1.5em] rounded border border-b-2 border-line bg-surface-2 px-[0.4em] text-center font-mono text-[0.75em]/[1.6] text-muted;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Small, highly reused primitives (also created from JavaScript), extracted with @apply */
+@layer components {
+  .btn {
+    @apply inline-flex h-[38px] items-center justify-center gap-1.5 rounded-md border border-transparent px-3.5 text-sm font-semibold whitespace-nowrap transition active:not-disabled:translate-y-px disabled:cursor-not-allowed disabled:opacity-45;
+  }
+  .btn-sm {
+    @apply h-8 px-2.5 text-[13px];
+  }
+  .btn-icon {
+    @apply size-9 px-0;
+  }
+  .btn-primary {
+    @apply bg-brand text-on-brand hover:not-disabled:bg-brand-hover;
+  }
+  .btn-ghost {
+    @apply text-muted hover:not-disabled:bg-surface-2 hover:not-disabled:text-ink;
+  }
+  .btn-soft {
+    @apply border-line bg-surface-2 text-ink hover:not-disabled:border-line-strong hover:not-disabled:bg-surface-hover;
+  }
+  .btn-danger {
+    @apply bg-danger text-white hover:not-disabled:bg-danger-hover dark:text-red-950;
+  }
+  .btn-danger-soft {
+    @apply bg-danger/12 text-danger hover:not-disabled:bg-danger hover:not-disabled:text-white dark:hover:not-disabled:text-red-950;
+  }
+  .badge {
+    @apply inline-flex h-[22px] items-center gap-1.5 rounded-full px-2 text-xs font-semibold whitespace-nowrap;
+  }
+}

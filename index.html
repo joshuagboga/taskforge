@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en" class="scheme-light dark:scheme-dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TaskForge — a task management dashboard built with vanilla JavaScript DOM manipulation.">
+  <title>TaskForge — Task Management Dashboard</title>
+  <!-- Compiled by the Tailwind CLI from src/input.css (npm run build) -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-canvas font-sans text-[15px] leading-normal text-ink antialiased transition-colors [&.modal-open]:overflow-hidden">
+  <!-- SVG icon sprite: referenced with <use href="#i-name"> so icons can be cloned with templates -->
+  <svg class="hidden" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+    <symbol id="i-import" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+    <symbol id="i-export" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></symbol>
+    <symbol id="i-reopen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-grip" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="9" cy="6" r="1.2"/><circle cx="15" cy="6" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="9" cy="18" r="1.2"/><circle cx="15" cy="18" r="1.2"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></symbol>
+    <symbol id="i-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01"/></symbol>
+    <symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></symbol>
+  </svg>
+
+  <a class="absolute -top-12 left-4 z-100 rounded-md bg-brand px-3.5 py-2 text-on-brand no-underline focus:top-3" href="#task-list">Skip to tasks</a>
+
+  <!-- ===================== Header / navigation ===================== -->
+  <header class="sticky top-0 z-20 border-b border-line bg-surface/85 backdrop-blur-md backdrop-saturate-150">
+    <div class="mx-auto flex w-full max-w-[1120px] flex-wrap items-center gap-2.5 px-4 py-2.5 md:min-h-16 md:flex-nowrap md:gap-4 md:py-0">
+      <a class="flex items-center gap-2.5 rounded-md text-ink no-underline" href="#" aria-label="TaskForge home">
+        <span class="grid size-8 place-items-center rounded-[9px] bg-linear-135 from-indigo-500 via-violet-500 to-pink-500 text-white shadow-lg shadow-indigo-500/35" aria-hidden="true">
+          <svg class="size-4.5"><use href="#i-logo"/></svg>
+        </span>
+        <span class="text-lg font-extrabold tracking-tight">Task<span class="text-brand">Forge</span></span>
+      </a>
+
+      <div class="relative order-3 basis-full md:order-none md:ml-auto md:max-w-[460px] md:flex-1 md:basis-auto" role="search">
+        <svg class="pointer-events-none absolute top-1/2 left-3 size-4.5 -translate-y-1/2 text-faint" aria-hidden="true"><use href="#i-search"/></svg>
+        <label for="search-input" class="sr-only">Search tasks</label>
+        <input type="search" id="search-input" class="peer h-10 w-full rounded-[10px] border border-line bg-surface-2 pr-10 pl-[38px] transition-colors placeholder:text-faint focus:border-brand focus:bg-surface focus:ring-3 focus:ring-brand/30 focus:outline-none" placeholder="Search title, description or category…" autocomplete="off" spellcheck="false">
+        <kbd class="pointer-events-none absolute top-1/2 right-2.5 hidden -translate-y-1/2 md:inline-block peer-focus:hidden peer-[:not(:placeholder-shown)]:hidden" aria-hidden="true">/</kbd>
+      </div>
+
+      <nav class="ml-auto flex items-center gap-1 md:ml-0" aria-label="Application actions">
+        <button type="button" id="import-btn" class="btn btn-ghost max-md:w-[38px] max-md:px-0" title="Import tasks from a JSON file">
+          <svg class="size-4.5" aria-hidden="true"><use href="#i-import"/></svg><span class="max-md:sr-only">Import</span>
+        </button>
+        <input type="file" id="import-input" accept="application/json,.json" hidden>
+        <button type="button" id="export-btn" class="btn btn-ghost max-md:w-[38px] max-md:px-0" title="Export tasks as JSON">
+          <svg class="size-4.5" aria-hidden="true"><use href="#i-export"/></svg><span class="max-md:sr-only">Export</span>
+        </button>
+        <button type="button" id="theme-toggle" class="btn btn-ghost btn-icon" aria-pressed="false" aria-label="Switch to dark mode" title="Toggle dark mode">
+          <svg class="size-4.5 dark:hidden" aria-hidden="true"><use href="#i-moon"/></svg>
+          <svg class="hidden size-4.5 dark:block" aria-hidden="true"><use href="#i-sun"/></svg>
+        </button>
+        <button type="button" id="add-task-btn" class="btn btn-primary max-md:w-[38px] max-md:px-0" aria-keyshortcuts="N">
+          <svg class="size-4.5" aria-hidden="true"><use href="#i-plus"/></svg><span class="max-md:sr-only">Add Task</span>
+          <kbd class="border-white/25 bg-white/20 text-inherit max-md:hidden">N</kbd>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mx-auto w-full max-w-[1120px] px-4 pt-5 pb-12 md:pt-7">
+    <div class="mb-5">
+      <h1 class="text-[26px] font-extrabold tracking-tight">Dashboard</h1>
+      <p class="mt-0.5 text-muted" id="today-label"></p>
+    </div>
+
+    <!-- ===================== Statistics ===================== -->
+    <section class="stats mb-[18px] grid grid-cols-2 gap-2.5 md:gap-3.5 lg:grid-cols-4" aria-label="Task statistics">
+      <button type="button" class="stat-card group relative grid grid-cols-[1fr_auto] items-start overflow-hidden rounded-[14px] border border-line bg-surface p-3.5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md md:px-[18px] md:py-4 [&.is-active]:border-brand [&.is-active]:ring-1 [&.is-active]:ring-brand" data-status="all">
+        <span class="col-start-2 row-span-2 row-start-1 grid size-[38px] place-items-center rounded-[10px] bg-brand/12 text-brand" aria-hidden="true"><svg class="size-4.5"><use href="#i-list"/></svg></span>
+        <span class="col-start-1 row-start-1 text-[13px] font-semibold text-muted">Total Tasks</span>
+        <span class="col-start-1 row-start-2 text-[26px]/tight font-extrabold tracking-tighter tabular-nums md:text-3xl/tight [&.bump]:animate-bump" id="stat-total">0</span>
+        <span class="col-span-2 mt-1 text-[12.5px] text-faint" id="stat-total-hint">&nbsp;</span>
+      </button>
+      <button type="button" class="stat-card group relative grid grid-cols-[1fr_auto] items-start overflow-hidden rounded-[14px] border border-line bg-surface p-3.5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md md:px-[18px] md:py-4 [&.is-active]:border-success [&.is-active]:ring-1 [&.is-active]:ring-success" data-status="completed">
+        <span class="col-start-2 row-span-2 row-start-1 grid size-[38px] place-items-center rounded-[10px] bg-success/12 text-success" aria-hidden="true"><svg class="size-4.5"><use href="#i-check-circle"/></svg></span>
+        <span class="col-start-1 row-start-1 text-[13px] font-semibold text-muted">Completed</span>
+        <span class="col-start-1 row-start-2 text-[26px]/tight font-extrabold tracking-tighter tabular-nums md:text-3xl/tight [&.bump]:animate-bump" id="stat-completed">0</span>
+        <span class="col-span-2 mt-1 text-[12.5px] text-faint" id="stat-completed-hint">&nbsp;</span>
+        <span class="absolute inset-x-0 bottom-0 h-[3px] bg-surface-2" aria-hidden="true"><span class="block h-full w-0 bg-success transition-[width] duration-400 ease-snappy" id="stat-progress-bar"></span></span>
+      </button>
+      <button type="button" class="stat-card group relative grid grid-cols-[1fr_auto] items-start overflow-hidden rounded-[14px] border border-line bg-surface p-3.5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md md:px-[18px] md:py-4 [&.is-active]:border-warning [&.is-active]:ring-1 [&.is-active]:ring-warning" data-status="pending">
+        <span class="col-start-2 row-span-2 row-start-1 grid size-[38px] place-items-center rounded-[10px] bg-warning/12 text-warning" aria-hidden="true"><svg class="size-4.5"><use href="#i-clock"/></svg></span>
+        <span class="col-start-1 row-start-1 text-[13px] font-semibold text-muted">Pending</span>
+        <span class="col-start-1 row-start-2 text-[26px]/tight font-extrabold tracking-tighter tabular-nums md:text-3xl/tight [&.bump]:animate-bump" id="stat-pending">0</span>
+        <span class="col-span-2 mt-1 text-[12.5px] text-faint" id="stat-pending-hint">&nbsp;</span>
+      </button>
+      <button type="button" class="stat-card group relative grid grid-cols-[1fr_auto] items-start overflow-hidden rounded-[14px] border border-line bg-surface p-3.5 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md md:px-[18px] md:py-4 [&.is-active]:border-danger [&.is-active]:ring-1 [&.is-active]:ring-danger" data-status="overdue">
+        <span class="col-start-2 row-span-2 row-start-1 grid size-[38px] place-items-center rounded-[10px] bg-danger/12 text-danger" aria-hidden="true"><svg class="size-4.5"><use href="#i-alert"/></svg></span>
+        <span class="col-start-1 row-start-1 text-[13px] font-semibold text-muted">Overdue</span>
+        <span class="col-start-1 row-start-2 text-[26px]/tight font-extrabold tracking-tighter tabular-nums group-[.has-overdue]:text-danger md:text-3xl/tight [&.bump]:animate-bump" id="stat-overdue">0</span>
+        <span class="col-span-2 mt-1 text-[12.5px] text-faint" id="stat-overdue-hint">&nbsp;</span>
+      </button>
+    </section>
+
+    <!-- ===================== Filters & sorting ===================== -->
+    <section class="mb-[18px] flex flex-col items-stretch gap-3 rounded-[14px] border border-line bg-surface p-3 shadow-sm lg:flex-row lg:flex-wrap lg:items-center lg:justify-between" aria-label="Filter and sort tasks">
+      <div class="flex w-full rounded-[10px] border border-line bg-surface-2 p-[3px] lg:inline-flex lg:w-auto" id="status-filters" role="group" aria-label="Filter by status">
+        <button type="button" class="flex-1 rounded-[7px] px-1.5 py-1.5 text-[12.5px] font-semibold text-muted transition-colors hover:text-ink sm:px-3.5 sm:text-[13.5px] lg:flex-none aria-pressed:bg-surface aria-pressed:text-ink aria-pressed:shadow-sm" data-status="all" aria-pressed="true">All</button>
+        <button type="button" class="flex-1 rounded-[7px] px-1.5 py-1.5 text-[12.5px] font-semibold text-muted transition-colors hover:text-ink sm:px-3.5 sm:text-[13.5px] lg:flex-none aria-pressed:bg-surface aria-pressed:text-success aria-pressed:shadow-sm" data-status="completed" aria-pressed="false">Completed</button>
+        <button type="button" class="flex-1 rounded-[7px] px-1.5 py-1.5 text-[12.5px] font-semibold text-muted transition-colors hover:text-ink sm:px-3.5 sm:text-[13.5px] lg:flex-none aria-pressed:bg-surface aria-pressed:text-ink aria-pressed:shadow-sm" data-status="pending" aria-pressed="false">Pending</button>
+        <button type="button" class="flex-1 rounded-[7px] px-1.5 py-1.5 text-[12.5px] font-semibold text-muted transition-colors hover:text-ink sm:px-3.5 sm:text-[13.5px] lg:flex-none aria-pressed:bg-surface aria-pressed:text-danger aria-pressed:shadow-sm" data-status="overdue" aria-pressed="false">Overdue</button>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <label class="inline-flex h-9 flex-[1_1_140px] items-center rounded-md border border-line bg-surface-2 pl-2.5 transition-colors focus-within:border-brand focus-within:ring-3 focus-within:ring-brand/30 md:flex-none [&.is-filtered]:border-brand [&.is-filtered]:bg-brand/10">
+          <span class="text-[12.5px] font-semibold text-faint">Priority</span>
+          <select id="priority-filter" class="h-full min-w-0 flex-1 cursor-pointer border-0 bg-transparent pr-2 pl-1.5 text-[13.5px] font-semibold focus-visible:outline-none [&_option]:bg-surface [&_option]:text-ink">
+            <option value="all">All</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+            <option value="critical">Critical</option>
+          </select>
+        </label>
+        <label class="inline-flex h-9 flex-[1_1_140px] items-center rounded-md border border-line bg-surface-2 pl-2.5 transition-colors focus-within:border-brand focus-within:ring-3 focus-within:ring-brand/30 md:flex-none [&.is-filtered]:border-brand [&.is-filtered]:bg-brand/10">
+          <span class="text-[12.5px] font-semibold text-faint">Category</span>
+          <select id="category-filter" class="h-full min-w-0 flex-1 cursor-pointer border-0 bg-transparent pr-2 pl-1.5 text-[13.5px] font-semibold focus-visible:outline-none [&_option]:bg-surface [&_option]:text-ink">
+            <option value="all">All</option>
+            <option value="work">Work</option>
+            <option value="personal">Personal</option>
+            <option value="school">School</option>
+            <option value="backend">Backend</option>
+            <option value="frontend">Frontend</option>
+            <option value="fintech">Fintech</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+        <label class="inline-flex h-9 flex-[1_1_140px] items-center rounded-md border border-line bg-surface-2 pl-2.5 transition-colors focus-within:border-brand focus-within:ring-3 focus-within:ring-brand/30 md:flex-none">
+          <span class="text-[12.5px] font-semibold text-faint">Sort</span>
+          <select id="sort-select" class="h-full min-w-0 flex-1 cursor-pointer border-0 bg-transparent pr-2 pl-1.5 text-[13.5px] font-semibold focus-visible:outline-none [&_option]:bg-surface [&_option]:text-ink">
+            <option value="manual">Custom order (drag)</option>
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="title-asc">A → Z</option>
+            <option value="title-desc">Z → A</option>
+            <option value="priority-desc">Highest Priority</option>
+            <option value="priority-asc">Lowest Priority</option>
+            <option value="due-asc">Closest Due Date</option>
+            <option value="due-desc">Furthest Due Date</option>
+          </select>
+        </label>
+        <button type="button" id="reset-filters" class="btn btn-ghost btn-sm" disabled>Reset filters</button>
+      </div>
+    </section>
+
+    <!-- ===================== Bulk actions + task list ===================== -->
+    <section class="overflow-hidden rounded-[14px] border border-line bg-surface shadow-sm" aria-labelledby="tasks-heading">
+      <h2 id="tasks-heading" class="sr-only">Tasks</h2>
+
+      <div class="group/bulk flex min-h-14 flex-wrap items-center gap-x-3.5 gap-y-2.5 border-b border-line bg-surface px-4 py-2.5 transition-colors [&.has-selection]:bg-brand/10" id="bulk-bar">
+        <label class="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold">
+          <input type="checkbox" id="select-all" class="size-[18px] cursor-pointer accent-brand">
+          <span>Select all</span>
+        </label>
+        <span class="text-[13px] text-muted tabular-nums group-[.has-selection]/bulk:font-bold group-[.has-selection]/bulk:text-brand" id="selected-count" aria-live="polite">0 selected</span>
+        <div class="flex flex-wrap gap-1.5 max-sm:w-full" id="bulk-actions" role="group" aria-label="Bulk actions">
+          <button type="button" class="btn btn-sm btn-soft max-sm:flex-auto" data-bulk="complete" disabled>
+            <svg class="size-[15px]" aria-hidden="true"><use href="#i-check"/></svg>Mark completed
+          </button>
+          <button type="button" class="btn btn-sm btn-soft max-sm:flex-auto" data-bulk="pending" disabled>
+            <svg class="size-[15px]" aria-hidden="true"><use href="#i-reopen"/></svg>Mark pending
+          </button>
+          <button type="button" class="btn btn-sm btn-danger-soft max-sm:flex-auto" data-bulk="delete" disabled>
+            <svg class="size-[15px]" aria-hidden="true"><use href="#i-trash"/></svg>Delete selected
+          </button>
+        </div>
+        <span class="basis-full text-[13px] text-faint md:ml-auto md:basis-auto" id="results-summary"></span>
+      </div>
+
+      <ul class="group/list m-0 list-none p-0 focus-visible:outline-none" id="task-list" aria-label="Task list" tabindex="-1"></ul>
+      <div class="px-6 py-14 text-center" id="list-message" hidden></div>
+      <nav class="flex flex-wrap justify-center gap-1 border-t border-line px-4 py-3" id="pagination" aria-label="Task pages" hidden></nav>
+    </section>
+
+    <p class="mt-[18px] text-center text-[12.5px]/8 text-faint">
+      Shortcuts: <kbd>N</kbd> new task · <kbd>/</kbd> search · <kbd>Esc</kbd> close ·
+      <kbd>Ctrl</kbd>+<kbd>Enter</kbd> save · <kbd>Ctrl</kbd>+<kbd>Z</kbd> undo delete ·
+      <kbd>↑</kbd><kbd>↓</kbd> move between tasks · <kbd>Alt</kbd>+<kbd>↑</kbd><kbd>↓</kbd> reorder
+    </p>
+  </main>
+
+  <!-- ===================== Task card template (cloned for every task) =====================
+       Classes such as task-card / task-title are hooks for JavaScript only; all styling is Tailwind utilities.
+       State classes added by JS (task--completed, task--overdue, priority--high, is-selected…) are styled
+       through arbitrary variants, e.g. [&.task--overdue]:bg-danger/5 or group-[.task--completed]:line-through. -->
+  <template id="task-template">
+    <li class="task-card group relative grid animate-card-in grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 gap-y-1 border-b border-line bg-surface py-3.5 pr-3 pl-3.5 transition-colors last:border-b-0 hover:bg-surface-hover focus-visible:-outline-offset-2 group-[.is-sortable]/list:grid-cols-[auto_auto_minmax(0,1fr)] md:grid-cols-[auto_minmax(0,1fr)_auto] md:pr-4 md:group-[.is-sortable]/list:grid-cols-[auto_auto_minmax(0,1fr)_auto] before:absolute before:inset-y-2.5 before:left-0 before:w-[3px] before:rounded-r before:bg-p-medium [&.priority--low]:before:bg-p-low [&.priority--high]:before:bg-p-high [&.priority--critical]:before:bg-p-critical [&.task--completed]:before:opacity-40 [&.task--overdue]:bg-danger/5 [&.task--overdue]:hover:bg-danger/8 [&.is-selected]:bg-brand/10! [&.is-dragging]:opacity-45 [&.is-highlighted]:animate-highlight" tabindex="0">
+      <label class="task-select -m-1.5 grid cursor-pointer place-items-center p-1.5">
+        <input type="checkbox" class="task-checkbox size-[18px] cursor-pointer accent-brand">
+      </label>
+      <span class="drag-handle hidden cursor-grab rounded py-0.5 text-faint hover:bg-surface-2 hover:text-ink active:cursor-grabbing group-[.is-sortable]/list:block" title="Drag to reorder" aria-hidden="true"><svg class="size-4.5"><use href="#i-grip"/></svg></span>
+      <div class="task-body group/body min-w-0 cursor-pointer" data-action="open">
+        <div class="flex min-w-0 items-center gap-2">
+          <h3 class="task-title min-w-0 truncate text-[15px] font-semibold group-hover/body:text-brand group-[.task--completed]:text-muted group-[.task--completed]:line-through group-[.task--completed]:decoration-[1.5px]"></h3>
+          <span class="status-badge badge h-5 shrink-0 text-[11px] tracking-wide uppercase"></span>
+        </div>
+        <p class="task-desc mt-0.5 line-clamp-2 text-[13.5px] text-muted group-[.task--completed]:opacity-60 md:line-clamp-1"></p>
+        <div class="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 group-[.task--completed]:opacity-60">
+          <span class="category-badge badge border border-line bg-surface-2 text-muted"></span>
+          <span class="priority-badge badge before:size-1.5 before:rounded-full before:bg-current"></span>
+          <span class="due-date inline-flex items-center gap-1.5 text-[12.5px] text-muted group-[.task--overdue]:font-semibold group-[.task--overdue]:text-danger"><svg class="size-3.5" aria-hidden="true"><use href="#i-calendar"/></svg><time></time></span>
+          <span class="created-date inline-flex items-center gap-1.5 text-[12.5px] text-faint"><svg class="size-3.5" aria-hidden="true"><use href="#i-clock"/></svg><time></time></span>
+        </div>
+      </div>
+      <div class="col-[-2/-1] mt-2 flex items-center gap-0.5 md:col-auto md:mt-0">
+        <button type="button" class="btn btn-sm mr-1 min-w-[108px] bg-success/12 text-success hover:bg-success hover:text-on-brand group-[.task--completed]:bg-surface-2 group-[.task--completed]:text-muted group-[.task--completed]:hover:bg-line group-[.task--completed]:hover:text-ink" data-action="toggle">
+          <svg class="size-[15px]" aria-hidden="true"><use href="#i-check"/></svg><span class="btn-complete-label">Complete</span>
+        </button>
+        <button type="button" class="btn btn-icon btn-ghost" data-action="edit" title="Edit task">
+          <svg class="size-4.5" aria-hidden="true"><use href="#i-edit"/></svg>
+        </button>
+        <button type="button" class="btn btn-icon btn-ghost hover:not-disabled:bg-danger/12 hover:not-disabled:text-danger" data-action="delete" title="Delete task">
+          <svg class="size-4.5" aria-hidden="true"><use href="#i-trash"/></svg>
+        </button>
+      </div>
+    </li>
+  </template>
+
+  <!-- ===================== Add / Edit task modal ===================== -->
+  <div class="modal-overlay fixed inset-0 z-50 grid animate-fade-in place-items-center overflow-y-auto bg-black/50 p-4 dark:bg-black/60" id="form-modal" hidden>
+    <div class="w-full max-w-[560px] animate-pop-in rounded-[14px] border border-line bg-surface shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="form-modal-title">
+      <header class="flex items-center justify-between gap-3 pt-4 pr-4 pb-3 pl-[22px]">
+        <h2 id="form-modal-title" class="text-lg font-bold tracking-tight">New Task</h2>
+        <button type="button" class="btn btn-icon btn-ghost" data-close aria-label="Close">
+          <svg class="size-4.5" aria-hidden="true"><use href="#i-x"/></svg>
+        </button>
+      </header>
+      <form id="task-form" class="group/form" novalidate>
+        <div class="mb-3.5 flex flex-col gap-1.5 px-[22px]">
+          <label for="task-title" class="text-[13.5px] font-semibold">Title <span class="text-danger" aria-hidden="true">*</span></label>
+          <input type="text" id="task-title" name="title" maxlength="100" placeholder="e.g. Integrate payment webhooks" aria-describedby="task-title-error" class="w-full rounded-md border border-line-strong bg-surface px-3 py-[9px] transition placeholder:text-faint focus:border-brand focus:ring-3 focus:ring-brand/30 focus:outline-none aria-invalid:border-danger aria-invalid:bg-danger/10">
+          <small class="field-error text-[12.5px] font-medium text-danger empty:hidden" id="task-title-error" aria-live="polite"></small>
+        </div>
+        <div class="mb-3.5 flex flex-col gap-1.5 px-[22px]">
+          <label for="task-description" class="text-[13.5px] font-semibold">Description <span class="text-danger" aria-hidden="true">*</span></label>
+          <textarea id="task-description" name="description" rows="4" maxlength="500" placeholder="What needs to be done? (at least 10 characters)" aria-describedby="task-description-error" class="min-h-24 w-full resize-y rounded-md border border-line-strong bg-surface px-3 py-[9px] transition placeholder:text-faint focus:border-brand focus:ring-3 focus:ring-brand/30 focus:outline-none aria-invalid:border-danger aria-invalid:bg-danger/10"></textarea>
+          <small class="field-error text-[12.5px] font-medium text-danger empty:hidden" id="task-description-error" aria-live="polite"></small>
+        </div>
+        <div class="grid grid-cols-1 px-[22px] md:grid-cols-3 md:gap-3">
+          <div class="mb-3.5 flex flex-col gap-1.5">
+            <label for="task-category" class="text-[13.5px] font-semibold">Category <span class="text-danger" aria-hidden="true">*</span></label>
+            <select id="task-category" name="category" aria-describedby="task-category-error" class="w-full rounded-md border border-line-strong bg-surface px-3 py-[9px] transition focus:border-brand focus:ring-3 focus:ring-brand/30 focus:outline-none aria-invalid:border-danger aria-invalid:bg-danger/10">
+              <option value="">Select…</option>
+              <option value="work">Work</option>
+              <option value="personal">Personal</option>
+              <option value="school">School</option>
+              <option value="backend">Backend</option>
+              <option value="frontend">Frontend</option>
+              <option value="fintech">Fintech</option>
+              <option value="other">Other</option>
+            </select>
+            <small class="field-error text-[12.5px] font-medium text-danger empty:hidden" id="task-category-error" aria-live="polite"></small>
+          </div>
+          <div class="mb-3.5 flex flex-col gap-1.5">
+            <label for="task-priority" class="text-[13.5px] font-semibold">Priority <span class="text-danger" aria-hidden="true">*</span></label>
+            <select id="task-priority" name="priority" aria-describedby="task-priority-error" class="w-full rounded-md border border-line-strong bg-surface px-3 py-[9px] transition focus:border-brand focus:ring-3 focus:ring-brand/30 focus:outline-none aria-invalid:border-danger aria-invalid:bg-danger/10">
+              <option value="">Select…</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="critical">Critical</option>
+            </select>
+            <small class="field-error text-[12.5px] font-medium text-danger empty:hidden" id="task-priority-error" aria-live="polite"></small>
+          </div>
+          <div class="mb-3.5 flex flex-col gap-1.5">
+            <label for="task-due" class="text-[13.5px] font-semibold">Due date <span class="text-danger" aria-hidden="true">*</span></label>
+            <input type="date" id="task-due" name="dueDate" aria-describedby="task-due-error" class="w-full rounded-md border border-line-strong bg-surface px-3 py-[9px] transition focus:border-brand focus:ring-3 focus:ring-brand/30 focus:outline-none aria-invalid:border-danger aria-invalid:bg-danger/10">
+            <small class="field-error text-[12.5px] font-medium text-danger empty:hidden" id="task-due-error" aria-live="polite"></small>
+          </div>
+        </div>
+        <footer class="flex flex-wrap items-center justify-end gap-2 px-[22px] pt-4 pb-5 group-[.shake]/form:animate-shake">
+          <span class="mr-auto hidden text-[12.5px] text-faint md:inline"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to save</span>
+          <button type="button" class="btn btn-ghost max-md:flex-auto" data-close>Cancel</button>
+          <button type="submit" class="btn btn-primary max-md:flex-auto" id="form-submit">Add Task</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== Task details modal ===================== -->
+  <div class="modal-overlay fixed inset-0 z-50 grid animate-fade-in place-items-center overflow-y-auto bg-black/50 p-4 dark:bg-black/60" id="details-modal" hidden>
+    <div class="w-full max-w-[560px] animate-pop-in rounded-[14px] border border-line bg-surface shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="details-title">
+      <header class="flex items-start justify-between gap-3 pt-4 pr-4 pb-3 pl-[22px]">
+        <h2 id="details-title" class="pt-1.5 text-lg font-bold tracking-tight wrap-anywhere"></h2>
+        <button type="button" class="btn btn-icon btn-ghost" data-close aria-label="Close">
+          <svg class="size-4.5" aria-hidden="true"><use href="#i-x"/></svg>
+        </button>
+      </header>
+      <div class="px-[22px] pb-2" id="details-body"></div>
+      <footer class="flex flex-wrap items-center justify-end gap-2 px-[22px] pt-4 pb-5">
+        <button type="button" class="btn btn-danger-soft max-md:flex-auto md:mr-auto" data-details-action="delete">
+          <svg class="size-4.5" aria-hidden="true"><use href="#i-trash"/></svg>Delete
+        </button>
+        <button type="button" class="btn btn-ghost max-md:flex-auto" data-close>Close</button>
+        <button type="button" class="btn btn-soft max-md:flex-auto" data-details-action="toggle" id="details-toggle">Mark completed</button>
+        <button type="button" class="btn btn-primary max-md:flex-auto" data-details-action="edit">
+          <svg class="size-4.5" aria-hidden="true"><use href="#i-edit"/></svg>Edit
+        </button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ===================== Confirmation modal (delete / discard / import) ===================== -->
+  <div class="modal-overlay fixed inset-0 z-60 grid animate-fade-in place-items-center overflow-y-auto bg-black/50 p-4 dark:bg-black/60" id="confirm-modal" hidden>
+    <div class="group w-full max-w-[420px] animate-pop-in rounded-[14px] border border-line bg-surface pt-6 text-center shadow-2xl" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-message">
+      <div class="mb-3 inline-grid size-12 place-items-center rounded-full bg-danger/12 text-danger group-[.is-neutral]:bg-brand/12 group-[.is-neutral]:text-brand" aria-hidden="true">
+        <svg class="size-6"><use href="#i-alert"/></svg>
+      </div>
+      <h2 id="confirm-title" class="px-6 text-lg font-bold">Are you sure?</h2>
+      <p id="confirm-message" class="mt-1.5 px-6 text-muted wrap-anywhere"></p>
+      <footer class="flex items-center justify-center gap-2 px-[22px] pt-5 pb-5">
+        <button type="button" class="btn btn-ghost flex-1" data-close id="confirm-cancel">Cancel</button>
+        <button type="button" class="btn btn-danger flex-1" id="confirm-ok">Confirm</button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="pointer-events-none fixed right-4 bottom-4 z-70 flex w-[min(380px,calc(100vw-32px))] flex-col gap-2" id="toast-container" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

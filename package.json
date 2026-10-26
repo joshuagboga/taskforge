@@ -1,0 +1,14 @@
+{
+  "name": "taskforge",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TaskForge — task management dashboard built with vanilla JavaScript DOM manipulation and Tailwind CSS",
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./style.css --minify",
+    "dev": "tailwindcss -i ./src/input.css -o ./style.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}
